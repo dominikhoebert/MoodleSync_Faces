@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<quiz>
+<!-- question: 0  -->
+  <question type="category">
+    <category>
+      <text>$course$/top/Standard für SYT5 3xHIT 22//23</text>
+    </category>
+    <info format="moodle_auto_format">
+      <text>Standardkategorie für Fragen, die im Kontext 'SYT5 3xHIT 22/23' freigegeben sind.</text>
+    </info>
+    <idnumber></idnumber>
+  </question>
+
+<!-- question: 518923  -->
+  <question type="multichoice">
+    <name>
+      <text>test1</text>
+    </name>
+    <questiontext format="moodle_auto_format">
+      <text>test1</text>
+    </questiontext>
+    <generalfeedback format="moodle_auto_format">
+      <text></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>0.3333333</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <single>true</single>
+    <shuffleanswers>true</shuffleanswers>
+    <answernumbering>abc</answernumbering>
+    <showstandardinstruction>0</showstandardinstruction>
+    <correctfeedback format="html">
+      <text>Die Antwort ist richtig.</text>
+    </correctfeedback>
+    <partiallycorrectfeedback format="html">
+      <text>Die Antwort ist teilweise richtig.</text>
+    </partiallycorrectfeedback>
+    <incorrectfeedback format="html">
+      <text>Die Antwort ist falsch.</text>
+    </incorrectfeedback>
+    <shownumcorrect/>
+    <answer fraction="100" format="html">
+      <text>test1</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text>test2</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="0" format="html">
+      <text>test3</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+  </question>
+
+<!-- question: 112872  -->
+  <question type="truefalse">
+    <name>
+      <text>test</text>
+    </name>
+    <questiontext format="html">
+      <text><![CDATA[<p dir="ltr" style="text-align: left;">ist das wahr oder falsch?<br></p>]]></text>
+    </questiontext>
+    <generalfeedback format="html">
+      <text></text>
+    </generalfeedback>
+    <defaultgrade>1.0000000</defaultgrade>
+    <penalty>1.0000000</penalty>
+    <hidden>0</hidden>
+    <idnumber></idnumber>
+    <answer fraction="100" format="moodle_auto_format">
+      <text>true</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+    <answer fraction="0" format="moodle_auto_format">
+      <text>false</text>
+      <feedback format="html">
+        <text></text>
+      </feedback>
+    </answer>
+  </question>
+
+</quiz>
