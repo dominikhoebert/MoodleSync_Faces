@@ -3,7 +3,7 @@ from face import save_faces_json
 
 # credentials_file = "data/credentials_local.json"
 credentials_file = "data/credentials.json"
-faces_path = "data/faces/3AHIT/"
+faces_path = "data/faces"
 faces_json = "data/faces.json"
 
 
@@ -17,7 +17,6 @@ def main():
     successful_downloads = ms.download_faces(faces, path=faces_path)
     print(f"{successful_downloads}/{len(faces)} faces downloaded successfully.")
     save_faces_json(faces, filename=faces_json)
-    print(faces)
 
 
 if __name__ == "__main__":

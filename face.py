@@ -67,6 +67,14 @@ class Face:
     def hd_url(self) -> str:
         return f"https://elearning.tgm.ac.at/pluginfile.php/{self.image_url.split('/')[4]}/user/icon/lambda/f3"
 
+    def create_path(self) -> str:
+        path = ""
+        if self.course is not None:
+            path += f"{self.course.fullname.replace(' ', '').replace('/', '')}/"
+        if self.group is not None:
+            path += f"{self.group.name}/"
+        return path
+
 
 @dataclass
 class Group:

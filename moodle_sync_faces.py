@@ -117,10 +117,14 @@ class MoodleSyncFaces:
         # return create_request_helper(self.url, self.username, self.password, self.get_user_id())  # TODO put back in when working
         return create_request_helper(self.url, self.username, self.password, 82)
 
-    def download_faces(self, faces: list, path: str) -> int:
+    def download_faces(self, faces: list, path: str = ".") -> int:
         """Downloads the images of the faces to the given path and returns the number of downloaded images."""
+        if not path.endswith("/"):
+            path += "/"
+
+        path += faces[0].create_path()
         if not os.path.exists(path):
-            os.mkdir(path)
+            os.makedirs(path)
 
         request_helper = self.get_request_helper()
 

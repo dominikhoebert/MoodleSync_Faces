@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from xml.etree import cElementTree as ET
+from xml.etree import cElementTree as et
 from xml.dom import minidom
 
 
@@ -12,54 +12,54 @@ class Question:
     wrong_answers: list[str]
 
     def to_xml(self, quiz):
-        question = ET.Element("question", type="multichoice")
-        ET.SubElement(ET.SubElement(question, "name"), "text").text = self.title
-        ET.SubElement(ET.SubElement(question, "questiontext", format="moodle_auto_format"),
+        question = et.Element("question", type="multichoice")
+        et.SubElement(et.SubElement(question, "name"), "text").text = self.title
+        et.SubElement(et.SubElement(question, "questiontext", format="moodle_auto_format"),
                       "text").text = self.question_text
         self.add_other_elements(question)
-        correct_answer = ET.SubElement(question, "answer", fraction="100", format="html")
-        ET.SubElement(correct_answer, "text").text = self.correct_answer
+        correct_answer = et.SubElement(question, "answer", fraction="100", format="html")
+        et.SubElement(correct_answer, "text").text = self.correct_answer
         self.add_feedback(correct_answer)
         for wrong_answer in self.wrong_answers:
-            wrong_answer_element = ET.SubElement(question, "answer", fraction="0", format="html")
-            ET.SubElement(wrong_answer_element, "text").text = wrong_answer
+            wrong_answer_element = et.SubElement(question, "answer", fraction="0", format="html")
+            et.SubElement(wrong_answer_element, "text").text = wrong_answer
             self.add_feedback(wrong_answer_element)
         return question
 
     @staticmethod
     def add_feedback(answer):
-        feedback = ET.SubElement(answer, "feedback", format="html")
-        ET.SubElement(feedback, "text")
+        feedback = et.SubElement(answer, "feedback", format="html")
+        et.SubElement(feedback, "text")
 
     @staticmethod
     def add_other_elements(question):
-        ET.SubElement(ET.SubElement(question, "generalfeedback", format="moodle_auto_format"), "text")
-        ET.SubElement(question, "defaultgrade").text = "1.0000000"
-        ET.SubElement(question, "penalty").text = "0.3333333"
-        ET.SubElement(question, "hidden").text = 0
-        ET.SubElement(question, "single").text = "true"
-        ET.SubElement(question, "shuffleanswers").text = "true"
-        ET.SubElement(question, "answernumbering").text = "abc"
-        ET.SubElement(question, "showstandardinstruction").text = 0
-        ET.SubElement(ET.SubElement(question, "correctfeedback", format="html"), "text").text = "Your answer is correct."
-        ET.SubElement(ET.SubElement(question, "partiallycorrectfeedback", format="html"),
+        et.SubElement(et.SubElement(question, "generalfeedback", format="moodle_auto_format"), "text")
+        et.SubElement(question, "defaultgrade").text = "1.0000000"
+        et.SubElement(question, "penalty").text = "0.3333333"
+        et.SubElement(question, "hidden").text = 0
+        et.SubElement(question, "single").text = "true"
+        et.SubElement(question, "shuffleanswers").text = "true"
+        et.SubElement(question, "answernumbering").text = "abc"
+        et.SubElement(question, "showstandardinstruction").text = 0
+        et.SubElement(et.SubElement(question, "correctfeedback", format="html"), "text").text = "Your answer is correct."
+        et.SubElement(et.SubElement(question, "partiallycorrectfeedback", format="html"),
                       "text").text = "Your answer is partially correct."
-        ET.SubElement(ET.SubElement(question, "incorrectfeedback", format="html"), "text").text = "Your answer is incorrect."
-        ET.SubElement(question, "shownumcorrect")
+        et.SubElement(et.SubElement(question, "incorrectfeedback", format="html"), "text").text = "Your answer is incorrect."
+        et.SubElement(question, "shownumcorrect")
 
 
 def prettify(elem):
     """Return a pretty-printed XML string for the Element.
     """
-    rough_string = ET.tostring(elem, 'utf-8')
+    rough_string = et.tostring(elem, 'utf-8')
     reparsed = minidom.parseString(rough_string)
     return reparsed.toprettyxml(indent="\t")
 
 
 if __name__ == '__main__':
-    quiz = ET.Element("quiz")
+    quiz = et.Element("quiz")
     question = Question("Capital of France", "What is the capital of France?", "Paris", ["Berlin", "London", "Rome"])
     question = question.to_xml(quiz)
     quiz.append(question)
     print(prettify(quiz))
-    ET.ElementTree(quiz).write("data/filename.xml")
+    et.ElementTree(quiz).write("data/filename.xml")
