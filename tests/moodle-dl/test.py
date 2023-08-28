@@ -1,10 +1,12 @@
 import urllib
 
-username = ""
-password = ''
+from moodle_sync_faces import get_credentials
+
+url, username, password, service = get_credentials("../../data/credentials.json")
+
 # url = "https://elearning.tgm.ac.at/pluginfile.php/1548/user/icon/boost_union/f1?rev=76069"
 url = "https://elearning.tgm.ac.at/pluginfile.php/1548/user/icon/lambda/f3"
-filename = "data/doppler.jpg"
+filename = "../../data/doppler.jpg"
 url_base = "https://elearning.tgm.ac.at/"
 url_login = "https://elearning.tgm.ac.at/login/index.php"
 url_dashboard = "https://elearning.tgm.ac.at/my/"
@@ -57,7 +59,7 @@ def get_URL(url: str, cookie_jar_path: str = None):
     return response, session
 
 
-r, s = get_URL(url, "Cookies.txt")
+r, s = get_URL(url, "../../data/cookies.txt")
 with open(filename, 'wb') as handler:
     handler.write(r.content)
 

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-import xml.etree.cElementTree as ET
+from xml.etree import cElementTree as ET
 from xml.dom import minidom
 
 
@@ -16,6 +16,7 @@ class Question:
         ET.SubElement(ET.SubElement(question, "name"), "text").text = self.title
         ET.SubElement(ET.SubElement(question, "questiontext", format="moodle_auto_format"),
                       "text").text = self.question_text
+        self.add_other_elements(question)
         correct_answer = ET.SubElement(question, "answer", fraction="100", format="html")
         ET.SubElement(correct_answer, "text").text = self.correct_answer
         self.add_feedback(correct_answer)
@@ -33,16 +34,17 @@ class Question:
     @staticmethod
     def add_other_elements(question):
         ET.SubElement(ET.SubElement(question, "generalfeedback", format="moodle_auto_format"), "text")
-        ET.SubElement(question, "defaultgrade").text = 1.0000000
-        ET.SubElement(question, "penalty").text = 0.3333333
+        ET.SubElement(question, "defaultgrade").text = "1.0000000"
+        ET.SubElement(question, "penalty").text = "0.3333333"
         ET.SubElement(question, "hidden").text = 0
         ET.SubElement(question, "single").text = "true"
         ET.SubElement(question, "shuffleanswers").text = "true"
         ET.SubElement(question, "answernumbering").text = "abc"
         ET.SubElement(question, "showstandardinstruction").text = 0
         ET.SubElement(ET.SubElement(question, "correctfeedback", format="html"), "text").text = "Your answer is correct."
-        ET.SubElement(question, "partiallycorrectfeedback", format="html")
-        ET.SubElement(question, "incorrectfeedback", format="html")
+        ET.SubElement(ET.SubElement(question, "partiallycorrectfeedback", format="html"),
+                      "text").text = "Your answer is partially correct."
+        ET.SubElement(ET.SubElement(question, "incorrectfeedback", format="html"), "text").text = "Your answer is incorrect."
         ET.SubElement(question, "shownumcorrect")
 
 
@@ -60,4 +62,4 @@ if __name__ == '__main__':
     question = question.to_xml(quiz)
     quiz.append(question)
     print(prettify(quiz))
-    ET.ElementTree(quiz).write("filename.xml")
+    ET.ElementTree(quiz).write("data/filename.xml")
