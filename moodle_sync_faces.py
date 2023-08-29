@@ -2,7 +2,6 @@ import os
 import json
 from requests import post
 from face import Face, Group, Course
-from use_moodle_dl import create_request_helper
 
 
 def get_credentials(filename: str):
@@ -106,37 +105,3 @@ class MoodleSyncFaces:
     def get_groups_of_course(self, course: Course):
         response = self.core_group_get_course_groups(course.id)
         course.groups = [Group(group["id"], group["name"]) for group in response]
-
-    def core_webservice_get_site_info(self):
-        return self.call("core_webservice_get_site_info")
-
-    def get_user_id(self):
-        return self.core_webservice_get_site_info()["userid"]
-
-    def get_request_helper(self):
-        return create_request_helper(self.url, self.username, self.password, self.get_user_id())
-
-    def download_faces(self, faces: list, path: str = ".") -> int:
-        """Downloads the images of the faces to the given path and returns the number of downloaded images."""
-        if not path.endswith("/"):
-            path += "/"
-
-        path += faces[0].create_path()
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-        request_helper = self.get_request_helper()
-
-        counter = 0
-        for face in faces:
-            if not face.ignore_url:
-                counter += 1
-                response, _ = request_helper.get_URL(face.hd_url, "Cookies.txt")
-                face.filename = str(face.id) + "_" + face.fullname.replace(" ", "_") + "_" + str(face.token) + ".jpg"
-                if path:
-                    if path[-1] != "/":
-                        path += "/"
-                face.filename = path + face.filename
-                with open(face.filename, 'wb') as handler:
-                    handler.write(response.content)
-        return counter

@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
 from xml.etree import cElementTree as et
-from xml.dom import minidom
 
 
 @dataclass
@@ -32,6 +31,14 @@ class Question:
         et.SubElement(feedback, "text")
 
     @staticmethod
+    def create_category(name: str, info: str = ""):
+        category = et.Element("question", type="category")
+        et.SubElement(et.SubElement(category, "category"), "text").text = "$course$/top/" + name
+        et.SubElement(et.SubElement(category, "info"), "text", format="html").text = info
+        et.SubElement(category, "idnumber")
+        return category
+
+    @staticmethod
     def add_other_elements(question):
         et.SubElement(et.SubElement(question, "generalfeedback", format="moodle_auto_format"), "text")
         et.SubElement(question, "defaultgrade").text = "1.0000000"
@@ -46,20 +53,3 @@ class Question:
                       "text").text = "Your answer is partially correct."
         et.SubElement(et.SubElement(question, "incorrectfeedback", format="html"), "text").text = "Your answer is incorrect."
         et.SubElement(question, "shownumcorrect")
-
-
-def prettify(elem):
-    """Return a pretty-printed XML string for the Element.
-    """
-    rough_string = et.tostring(elem, 'utf-8')
-    reparsed = minidom.parseString(rough_string)
-    return reparsed.toprettyxml(indent="\t")
-
-
-if __name__ == '__main__':
-    quiz = et.Element("quiz")
-    question = Question("Capital of France", "What is the capital of France?", "Paris", ["Berlin", "London", "Rome"])
-    question = question.to_xml(quiz)
-    quiz.append(question)
-    print(prettify(quiz))
-    et.ElementTree(quiz).write("data/filename.xml")

@@ -3,10 +3,6 @@ import json
 from dataclasses import dataclass
 
 
-def generate_token():
-    return random.randint(10000, 99999)
-
-
 def save_faces_json(faces: list, filename: str = None):
     faces_dict = {"faces": [face.__dict__() for face in faces]}
     if filename:
@@ -25,9 +21,7 @@ class Face:
         self.email = email
         self.profile_url = None
         self.image_url = image_url
-        self.token = generate_token()
         self.filename = None
-        self.tags = []
         self.course = None
         self.group = None
 
@@ -46,14 +40,14 @@ class Face:
 
     def __repr__(self):
         return (f"Face(id: {self.id}, fullname: {self.fullname}, email: {self.email}, image_url: {self.image_url}, "
-                f"hd_url: {self.hd_url}, ignore_url: {self.ignore_url}, filename: {self.filename}, {self.tags}, "
+                f"hd_url: {self.hd_url}, ignore_url: {self.ignore_url}, filename: {self.filename}, "
                 f"{self.course.fullname if self.course else None}, {self.group.name if self.group else None})")
 
     def __dict__(self):
         return {"id": self.id, "firstname": self.firstname, "lastname": self.lastname,
                 "fullname": self.fullname, "email": self.email, "profile_url": self.profile_url,
-                "ignore_url": self.ignore_url, "image_url": self.image_url, "hd_url": self.hd_url, "token": self.token,
-                "filename": self.filename, "tags": self.tags,
+                "ignore_url": self.ignore_url, "image_url": self.image_url, "hd_url": self.hd_url,
+                "filename": self.filename,
                 "course_id": self.course.id if self.course else None,
                 "course_name": self.course.fullname if self.course else None,
                 "group_id": self.group.id if self.group else None,
@@ -65,6 +59,8 @@ class Face:
 
     @property
     def hd_url(self) -> str:
+        if self.ignore_url:
+            return self.image_url
         return f"https://elearning.tgm.ac.at/pluginfile.php/{self.image_url.split('/')[4]}/user/icon/lambda/f3"
 
     def create_path(self) -> str:

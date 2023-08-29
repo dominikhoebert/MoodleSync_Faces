@@ -415,3 +415,4 @@ cython_debug/
 #.idea/
 
 !/data/
+!/credentials.json
