@@ -46,13 +46,13 @@ class Face:
 
     def __repr__(self):
         return (f"Face(id: {self.id}, fullname: {self.fullname}, email: {self.email}, image_url: {self.image_url}, "
-                f"ignore_url: {self.ignore_url}, filename: {self.filename}, {self.tags}, "
+                f"hd_url: {self.hd_url}, ignore_url: {self.ignore_url}, filename: {self.filename}, {self.tags}, "
                 f"{self.course.fullname if self.course else None}, {self.group.name if self.group else None})")
 
     def __dict__(self):
         return {"id": self.id, "firstname": self.firstname, "lastname": self.lastname,
                 "fullname": self.fullname, "email": self.email, "profile_url": self.profile_url,
-                "ignore_url": self.ignore_url, "image_url": self.image_url, "token": self.token,
+                "ignore_url": self.ignore_url, "image_url": self.image_url, "hd_url": self.hd_url, "token": self.token,
                 "filename": self.filename, "tags": self.tags,
                 "course_id": self.course.id if self.course else None,
                 "course_name": self.course.fullname if self.course else None,

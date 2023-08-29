@@ -114,8 +114,7 @@ class MoodleSyncFaces:
         return self.core_webservice_get_site_info()["userid"]
 
     def get_request_helper(self):
-        # return create_request_helper(self.url, self.username, self.password, self.get_user_id())  # TODO put back in when working
-        return create_request_helper(self.url, self.username, self.password, 82)
+        return create_request_helper(self.url, self.username, self.password, self.get_user_id())
 
     def download_faces(self, faces: list, path: str = ".") -> int:
         """Downloads the images of the faces to the given path and returns the number of downloaded images."""

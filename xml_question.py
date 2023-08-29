@@ -14,7 +14,7 @@ class Question:
     def to_xml(self, quiz):
         question = et.Element("question", type="multichoice")
         et.SubElement(et.SubElement(question, "name"), "text").text = self.title
-        et.SubElement(et.SubElement(question, "questiontext", format="moodle_auto_format"),
+        et.SubElement(et.SubElement(question, "questiontext", format="markdown"),
                       "text").text = self.question_text
         self.add_other_elements(question)
         correct_answer = et.SubElement(question, "answer", fraction="100", format="html")
