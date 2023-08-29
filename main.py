@@ -1,9 +1,11 @@
+import os
 import random
 
 from moodle_sync_faces import MoodleSyncFaces
 from face import save_faces_json, Face
 from xml_question import Question
 from xml.etree import cElementTree as et
+import cutie
 
 credentials_file = "credentials.json"
 
@@ -34,25 +36,37 @@ def export_questions_to_xml(questions: list[Question], filename: str, category: 
 
 
 def main():
-    ms = MoodleSyncFaces.from_json(credentials_file)
+    if os.path.isfile(credentials_file):
+        ms = MoodleSyncFaces.from_json(credentials_file)
+    else:
+        print(f"{credentials_file} not found.")
+        url = input("Enter Moodle URL: ")
+        user = input("Enter username: ")
+        password = cutie.secure_input("Enter password: ")
+        service = input("Enter service name (ask administrator): ")
+        ms = MoodleSyncFaces(url, user, password, service)
     ms.load_courses()
-    print(ms.courses)
-    ms.get_groups_of_course(ms.courses[0])
-    print(ms.courses[0].groups)
-    faces = ms.get_faces(ms.courses[0], ms.courses[0].groups[0])
-    filename = (ms.courses[0].fullname.replace(" ", "").replace("/", "") + "_" +
-                ms.courses[0].groups[0].name + ".xml")
-    questions = create_questions_from_faces(faces)
-    print(f"Exported {len(questions)}/{len(faces)} questions to {filename}")
-    export_questions_to_xml(questions, filename, category="Faces_" + ms.courses[0].fullname)
-    save_faces_json(faces, filename="faces.json")  # TODO create better file name
+    print("\nSelect course:")
+    selected_course = ms.courses[cutie.select([course.fullname for course in ms.courses])]
+    ms.get_groups_of_course(selected_course)
+    print("\nSelect groups: (SPACE to select, ENTER to confirm)")
+    selected_groups = cutie.select_multiple([group.name for group in selected_course.groups])
+    for group_index in selected_groups:
+        group = selected_course.groups[group_index]
+        faces = ms.get_faces(selected_course, group)
+        course_name = selected_course.fullname.replace(" ", "").replace("/", "")
+        filename = course_name + "_" + group.name
+        questions = create_questions_from_faces(faces)
+        export_questions_to_xml(questions, filename + ".xml", category="Faces/" + filename)
+        print(f"Exported {len(questions)}/{len(faces)} questions to {filename}.xml")
+        save_faces_json(faces, filename=filename + ".json")
 
 
 if __name__ == "__main__":
     main()
 
 # TODOs:
-# - [ ] read in credentials from file
-# - [ ] dialog if no credentials file exists
-# - [ ] simple dialog to select course and group
-# - [ ] create better file name for faces.json
+# - [x] read in credentials from file
+# - [x] dialog if no credentials file exists
+# - [x] simple dialog to select course and group
+# - [x] create better file name for faces.json
