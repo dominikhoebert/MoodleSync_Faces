@@ -7,7 +7,8 @@ from xml_question import Question
 from xml.etree import cElementTree as et
 import cutie
 
-credentials_file = "credentials.json"
+path = "data/"
+credentials_file = path + "credentials.json"
 
 
 def create_questions_from_faces(faces: list[Face]) -> list[Question]:
@@ -48,18 +49,28 @@ def main():
     ms.load_courses()
     print("\nSelect course:")
     selected_course = ms.courses[cutie.select([course.fullname for course in ms.courses])]
+    course_name = selected_course.fullname.replace(" ", "").replace("/", "")
     ms.get_groups_of_course(selected_course)
-    print("\nSelect groups: (SPACE to select, ENTER to confirm)")
-    selected_groups = cutie.select_multiple([group.name for group in selected_course.groups])
-    for group_index in selected_groups:
-        group = selected_course.groups[group_index]
-        faces = ms.get_faces(selected_course, group)
-        course_name = selected_course.fullname.replace(" ", "").replace("/", "")
-        filename = course_name + "_" + group.name
-        questions = create_questions_from_faces(faces)
-        export_questions_to_xml(questions, filename + ".xml", category="Faces/" + filename)
-        print(f"Exported {len(questions)}/{len(faces)} questions to {filename}.xml")
-        save_faces_json(faces, filename=filename + ".json")
+    print(selected_course.groups)
+    if len(selected_course.groups) > 0:
+        print("\nSelect groups: (SPACE to select, ENTER to confirm)")
+        selected_groups = cutie.select_multiple([group.name for group in selected_course.groups])
+        for group_index in selected_groups:
+            group = selected_course.groups[group_index]
+            faces = ms.get_faces(selected_course, group)
+            filename = path + course_name + "_" + group.name
+            export(faces, filename)
+    else:
+        faces = ms.get_faces(selected_course)
+        filename = path + course_name
+        export(faces, filename)
+
+
+def export(faces, filename):
+    questions = create_questions_from_faces(faces)
+    export_questions_to_xml(questions, filename + ".xml", category="Faces/" + filename)
+    print(f"Exported {len(questions)}/{len(faces)} questions to {filename}.xml")
+    save_faces_json(faces, filename=filename + ".json")
 
 
 if __name__ == "__main__":
