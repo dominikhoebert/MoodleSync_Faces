@@ -1,5 +1,7 @@
 import os
 import json
+
+import urllib3.exceptions
 from requests import post
 from face import Face, Group, Course
 
@@ -38,9 +40,18 @@ class MoodleSyncFaces:
 
     def get_token(self, username, password, service):
         obj = {"username": username, "password": password, "service": service}
-        response = post(self.url + "/login/token.php", data=obj)
+        try:
+            response = post(self.url + "/login/token.php", data=obj)
+        except Exception as e:
+            print("Error: Moodle URL not found. " + str(e))
+            print("Exiting...")
+            exit()
         response = response.json()
-        return response['token']
+        if 'token' in response:
+            return response['token']
+        else:
+            print("Error: " + str(response))
+            exit()
 
     def rest_api_parameters(self, in_args, prefix='', out_dict=None):
         """Transform dictionary/array structure to a flat dictionary, with key names
